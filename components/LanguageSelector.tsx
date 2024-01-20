@@ -1,36 +1,50 @@
 // components/LanguageSelector.tsx
-
-import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import React from "react";
 
 const LanguageSelector: React.FC = () => {
-  const [selectedLanguage, setSelectedLanguage] = useState<string>();
-  useEffect(() => {
-    // Retrieve data from local storage on component mount
-    const storedData = localStorage.getItem("selectedLanguage");
-    if (storedData) {
-      setSelectedLanguage(storedData);
-    }
-  }, []);
+  const { t, i18n } = useTranslation();
 
-  const handleLanguageChange = (newLanguage: string) => {
-    setSelectedLanguage(newLanguage);
+  //   const [selectedLanguage, setSelectedLanguage] = useState<string>();
+  //   useEffect(() => {
+  //     // Retrieve data from local storage on component mount
+  //     const storedData = localStorage.getItem("selectedLanguage");
+  //     if (storedData) {
+  //       setSelectedLanguage(storedData);
+  //     }
+  //   }, []);
+
+  const handleLanguageChange = async (newLanguage: string) => {
     localStorage.setItem("selectedLanguage", newLanguage);
     document.cookie = `selectedLanguage=${newLanguage}; path=/`;
+    window.localStorage.setItem("MY_LANGUAGE", newLanguage);
+    await i18n.changeLanguage(newLanguage);
   };
 
+  const languages = [
+    { code: "en", translateKey: "english" },
+    { code: "fr", translateKey: "french" },
+    { code: "ukr", translateKey: "ukrainian" },
+  ];
   return (
     <div>
-      <p>Selected Language: {selectedLanguage}</p>
-      <select
-        value={selectedLanguage}
-        onChange={(e) => handleLanguageChange(e.target.value)}
-      >
-        <option value="en">English</option>
-        <option value="fr">French</option>
-
-        <option value="ukr">Ukrainian</option>
-        {/* Add more language options as needed */}
-      </select>
+      <div className="my-4 flex flex-row gap-3">
+        {languages.map((language) => (
+          <button
+            // className="rounded bg-blue-500 px-4 py-2 font-bold text-white"
+            data-id={`${language.code}-button`}
+            className={
+              i18n.language === language.code
+                ? "rounded bg-blue-300 px-4 py-2 font-bold text-gray-700"
+                : "rounded bg-gray-100 px-4 py-2 font-bold text-gray-700"
+            }
+            onClick={() => handleLanguageChange(language.code)}
+            key={language.code}
+          >
+            {t(language.translateKey)}
+          </button>
+        ))}
+      </div>
     </div>
   );
 };
