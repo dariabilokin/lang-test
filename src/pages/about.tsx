@@ -1,12 +1,9 @@
-import Head from "next/head";
-import { GetServerSideProps } from "next";
-import LanguageSelector from "components/LanguageSelector";
 import { useTranslation } from "react-i18next";
-
 import Link from "next/link";
-
-const Home: React.FC = () => {
-  const { t } = useTranslation();
+import LanguageSelector from "components/LanguageSelector";
+import Head from "next/head";
+const About = () => {
+  const { t } = useTranslation("about");
 
   return (
     <>
@@ -18,18 +15,18 @@ const Home: React.FC = () => {
       <main className="flex min-h-screen flex-col items-center justify-center">
         <Link
           className="my-5 rounded bg-blue-500 px-4 py-2 font-bold text-white"
-          href={"/about"}
+          href={"/"}
         >
-          About page
+          Home page
         </Link>
         <LanguageSelector />
-        <div className="my-5 flex flex-col items-center">
+        <div className="my-5 flex flex-col items-center justify-center">
           <h1 className="text-3xl font-bold text-gray-700">{t("title")}</h1>
           <h3 className="text-lg text-gray-700">{t("content")}</h3>
-          <h3 className="text-sm text-gray-700">{t("extraContent")}</h3>
         </div>
       </main>
     </>
   );
 };
-export default Home;
+
+export default About;
